@@ -6,161 +6,75 @@
 #define	WLEN	16
 
 typedef enum{
-	W_SET,
-	W_CLEAR,
-	W_LIST,
-	W_CONFIG,
-	W_OP,
-	W_CUG,
-	W_TUN,
-	W_LINK,
-	W_DISP,
-	W_MAX,
-	W_PORT,
-	W_CRYPT,
-	W_AES,
-	W_CAMELLIA,
-	W_RELAY,
-	W_ON,
-	W_OFF,
-	W_SEG,
-	W_POOL,
-	W_ROUTE,
-	W_DNS,
-	W_PERMIT,
-	W_DENY,
-	W_ALL,
-	W_DEL,
+	W_B=-1,
+	W_E =0,
 	W_SHOW,
-	W_MODE,
-	W_QOS,
-	W_TRF,
-	W_ACL,
+	W_STATUS,
+	W_AGENT,
+	W_TERM,
+	W_TRAF,
+	W_TC,
+	W_TS,
+	W_SS,
+	W_CONN,
+	W_OPEN,
+	W_CLOSE,
 	W_ADD,
-	W_GDR,
-	W_START,
-	W_STOP,
-	W_IP,
-	W_BIND,
+	W_DEL,
+	W_REG,
+	W_PASS,
+	W_UPDATE,
+	W_ROUTE,
 	W_EXIT,
-	W_QUIT,
-	W_E,
-	W_S,
+	W_OMIT,
+	W_COMMA,
 } W_WORD;
 
 typedef struct {
 	W_WORD	w_word;
 	char	word[WLEN];
-}WORD_LIST;
-
-WORD_LIST wlist[]={
-	{W_SET,"set"},
-	{W_CLEAR,"clear"},
-	{W_LIST,"list"},
-	{W_CONFIG,"conf"},
-	{W_CONFIG,"config"},
-	{W_OP,"op"},
-	{W_CUG,"cug"},
-	{W_LINK,"link"},
-	{W_TUN,"tun"},
-	{W_DISP,"disp"},
-	{W_MAX,"max"},
-	{W_PORT,"port"},
-	{W_CRYPT,"crypt"},
-	{W_AES,"aes"},
-	{W_CAMELLIA,"camellia"},
-	{W_CAMELLIA,"came"},
-	{W_RELAY,"relay"},
-	{W_ON,"on"},
-	{W_OFF,"off"},
-	{W_SEG,"seg"},
-	{W_IP,"ip"},
-	{W_BIND,"bind"},
-	{W_POOL,"pool"},
-	{W_ROUTE,"route"},
-	{W_DNS,"dns"},
-	{W_PERMIT,"permit"},
-	{W_DENY,"deny"},
-	{W_ALL,"all"},
-	{W_ADD,"add"},
-	{W_DEL,"del"},
+}WORD_LIST ;
+static WORD_LIST wlist[]={
 	{W_SHOW,"show"},
-	{W_MODE,"mode"},
-	{W_QOS,"qos"},
-	{W_TRF,"trf"},
-	{W_ACL,"acl"},
-	{W_GDR,"gdr"},
-	{W_START,"start"},
-	{W_STOP,"stop"},
+	{W_STATUS,"status"},
+	{W_AGENT,"agent"},
+	{W_TERM,"terminal"},
+	{W_CONN,"connect"},
+	{W_OPEN,"open"},
+	{W_CLOSE,"close"},
+	{W_ADD,"add"},
+	{W_DEL,"delete"},
+	{W_TRAF,"traf"},
+	{W_REG,"register"},
+	{W_PASS,"password"},
+	{W_UPDATE,"update"},
+	{W_ROUTE,"route"},
 	{W_EXIT,"exit"},
-	{W_QUIT,"quit"},
 	{W_E,""}
 } ;
-#define	COM_LINE	5
 typedef struct {
 	int	CMD_ID;
-	W_WORD	word[COM_LINE];
-	int		mode;
-	int		params;//最大パラメータ数
-	int		parav;//0:最大パラメータ数必須 1:パラメータオプション
+	W_WORD	word[COL_MAX];
 }COMMAND_TREE;
 COMMAND_TREE	tree[]=
 {
-	{SET_DISP,{W_S,W_DISP,W_E},M_CONF_S,1,0},
-	{SET_MAX,{W_S,W_MAX,W_E},M_CONF_S,1,0},
-	{SET_PORT,{W_S,W_PORT,W_E},M_CONF_S,1,0},
-	{SET_CRYPT_A,{W_S,W_CRYPT,W_AES,W_E},M_CONF_S,2,0},
-	{SET_CRYPT_C,{W_S,W_S,W_CAMELLIA,W_E},M_CONF_S,2,0},
-	{SET_RELAY_ON,{W_S,W_RELAY,W_ON,W_E},M_CONF_S,1,0},
-	{SET_RELAY_OFF,{W_S,W_RELAY,W_OFF,W_E},M_CONF_S,1,0},
-	{SET_SEG,{W_S,W_SEG,W_E},M_CONF_S,2,0},
-	{SET_BIND,{W_S,W_BIND,W_E},M_CONF_C,1,0},
-	{SET_IP,{W_S,W_IP,W_E},M_CONF_C,2,0},
-	{CLR_ALL,{W_S,W_ALL,W_E},M_CONF_C|M_CONF_S,0,0},
-	{LST_TUN,{W_S,W_TUN,W_E},M_CONF_S,0,0},
-	{ADD_POOL,{W_ADD,W_POOL,W_E},M_CONF_S,2,0},
-	{ADD_ROUTE,{W_S,W_ROUTE,W_E},M_CONF_S,3,0},
-	{ADD_DNS,{W_S,W_DNS,W_E},M_CONF_S,2,0},
-	{ADD_PERMIT,{W_S,W_PERMIT,W_E},M_CONF_S,2,0},
-	{ADD_DENY,{W_S,W_DENY,W_E},M_CONF_S,2,0},
-	{DEL_POOL,{W_DEL,W_POOL,W_E},M_CONF_S,2,0},
-	{DEL_ROUTE,{W_S,W_ROUTE,W_E},M_CONF_S,3,0},
-	{DEL_DNS,{W_S,W_DNS,W_E},M_CONF_S,2,0},
-	{DEL_PERMIT,{W_S,W_PERMIT,W_E},M_CONF_S,2,0},
-	{DEL_DENY,{W_S,W_DENY,W_E},M_CONF_S,2,0},
-	{SHW_CUG_MODE,{W_S,W_S,W_MODE,W_E},M_CONF_S,0,0},
-	{SHW_CUG_QOS,{W_S,W_S,W_QOS,W_E},M_CONF_S,0,0},
-	{SHW_CUG_TRF,{W_S,W_S,W_TRF,W_E},M_CONF_S|M_CONF_C,0,0},
-	{SHW_CUG_ACL,{W_S,W_S,W_ACL,W_E},M_CONF_S,0,0},
-	{SHW_CUG_BIND,{W_S,W_S,W_BIND,W_E},M_CONF_C,0,0},
-	{SHW_CUG_IP,{W_S,W_S,W_IP,W_E},M_CONF_C,0,0},
-
-	{SHW_TUN_ALL,{W_S,W_TUN,W_ALL,W_E},M_CONF_T,0,0},
-	{SHW_TUN_DISP,{W_S,W_S,W_DISP,W_E},M_CONF_T,0,0},
-	{SHW_TUN_MAX,{W_S,W_S,W_MAX,W_E},M_CONF_T,0,0},
-	{SHW_TUN_PORT,{W_S,W_S,W_PORT,W_E},M_CONF_T,0,0},
-	{SHW_TUN_CRYPT,{W_S,W_S,W_CRYPT,W_E},M_CONF_T,0,0},
-	{SHW_TUN_RELAY,{W_S,W_S,W_RELAY,W_E},M_CONF_T,0,0},
-	{SHW_TUN_SEG,{W_S,W_S,W_SEG,W_E},M_CONF_T,0,0},
-	{SHW_TUN_POOL,{W_S,W_S,W_POOL,W_E},M_CONF_T,0,0},
-	{SHW_TUN_ROUTE,{W_S,W_S,W_ROUTE,W_E},M_CONF_T,0,0},
-	{SHW_TUN_DNS,{W_S,W_S,W_DNS,W_E},M_CONF_T,0,0},
-	{SHW_TUN_PERMIT,{W_S,W_S,W_PERMIT,W_E},M_CONF_T,0,0},
-	{SHW_TUN_DENY,{W_S,W_S,W_DENY,W_E},M_CONF_T,0,0},
-	{SHW_TUN_MODE,{W_S,W_S,W_MODE,W_E},M_CONF_T,0,0},
-	{SHW_TUN_QOS,{W_S,W_S,W_QOS,W_E},M_CONF_T,0,0},
-	{SHW_TUN_TRF,{W_S,W_S,W_TRF,W_E},M_CONF_T,0,0},
-	{SHW_TUN_ACL,{W_S,W_S,W_ACL,W_E},M_CONF_T,0,0},
-	{SHW_TUN_BIND,{W_S,W_S,W_BIND,W_E},M_CONF_T,0,0},
-	{SHW_TUN_IP,{W_S,W_S,W_IP,W_E},M_CONF_T,0,0},
-
-	{CMD_GDR,{W_GDR,W_E},M_OP_S|M_OP_C,0,0},
-	{CMD_START,{W_START,W_E},M_OP_S|M_OP_C,0,0},
-	{CMD_STOP,{W_STOP,W_E},M_OP_S|M_OP_C,0,0},
-	{CMD_EXIT,{W_EXIT,W_E},M_OP_S|M_OP_C|M_CONF_S|M_CONF_C,0,0},
-	{CMD_QUIT,{W_QUIT,W_E},M_NORMAL,0,0},
-	{CMD_NOP,{W_E,W_E,W_E,W_E,W_E},0,0}
+	{CMD_SHOW_STATUS,{W_SHOW,W_STATUS,W_E}},
+	{CMD_SHOW_AGENT_TRAF ,{W_SHOW,W_AGENT,W_TRAF,W_E}},
+	{CMD_SHOW_AGENT_ROUTE,{W_SHOW,W_AGENT,W_ROUTE,W_E}},
+	{CMD_SHOW_TRAF,{W_SHOW,W_TRAF,W_E}},
+	{CMD_SHOW_TERM,{W_SHOW,W_TERM,W_E}},
+	{CMD_CONN_OPEN,{W_CONN,W_OPEN,W_E}},
+	{CMD_CONN_CLOSE,{W_CONN,W_CLOSE,W_E}},
+	{CMD_ADD_AGENT,{W_ADD,W_AGENT,W_E}},
+	{CMD_ADD_TERM,{W_ADD,W_TERM,W_E}},
+	{CMD_DEL_AGENT,{W_DEL,W_AGENT,W_E}},
+	{CMD_DEL_TERM,{W_DEL,W_TERM,W_E}},
+	{CMD_REG_PASS,{W_REG,W_PASS,W_E}},
+	{CMD_UPDATE,{W_UPDATE,W_E}},
+	{CMD_EXIT ,{W_EXIT}},
+	{CMD_NOP,{W_B,W_B,W_B,W_B,W_B}}
 };
+
 
 static char *get_word(W_WORD w)
 {
@@ -176,7 +90,7 @@ static char *get_word(W_WORD w)
 	return NULL;
 }
 
-static W_WORD check_researve(char *word)
+static W_WORD check_reserved(char *word)
 {
 	int i;
 	for(i=0;;i++){
@@ -190,11 +104,80 @@ static W_WORD check_researve(char *word)
 	return wlist[i].w_word;
 }
 
+static int check_hist(W_WORD *stack, int raw)
+{
+	int ret=0;
+	int col;
+	for(col=0;col<COL_MAX;col++){
+		if(*stack==W_E){
+			break;
+		}
+		if(*stack==tree[raw].word[col]){
+			stack++;
+			continue;
+		}else{
+			ret=-1;
+			break;
+		}
+	}
+	return ret;
+}
+
+int WordsCandidate(char *buff,char *cand)
+{
+	int ret=0;
+	int col,raw;
+	W_WORD stack[COL_MAX];
+	char prev[PARAM_LEN];
+	TOKEN	token;
+	W_WORD code;
+	char	word[PARAM_LEN];
+	char *ptr;
+	char *ptr2;
+	for(col=0;col<COL_MAX;col++){
+		stack[col]=W_E;
+	}
+	ptr=buff;
+	prev[0]=0;
+	//make stack 
+	for(col=0;col<COL_MAX;col++){
+		token=GetToken(word,100,&ptr);
+		if(token==T_WORD || token==T_EOF){
+			if(strlen(word)!=0){
+				code=check_reserved(word);
+				if(code==W_E){//Not Matched, Incomplete word to be compensated
+					return 0;
+				}
+				stack[col]=code;
+			}
+		}
+	}
+	//Search Next Word
+	for(raw=0;tree[raw].word[0]!=W_B;raw++){
+		for(col=0;col<COL_MAX;col++){
+			if(stack[col]==W_E){
+				if(tree[raw].word[col]!=W_E){
+					ptr2=get_word(tree[raw].word[col]);
+					if(ptr2!=0 && strcmp(ptr2,prev)!=0){
+						strcat(cand,ptr2);
+						strcpy(prev,ptr2);
+						strcat(cand," ");
+						ret=1;
+					}
+				}
+				break;
+			}else if(stack[col]!=tree[raw].word[col]){
+				break;
+			}
+		}
+	}
+	return ret;
+}
 
 
 int WordCompensation(char *buff)
 {
-	int i,j,k;
+	int col,raw;
 	int comma=0;
 	char	word[100];
 	TOKEN	token;
@@ -203,37 +186,37 @@ int WordCompensation(char *buff)
 	char	*ptr2;
 	char	*ptr3;
 	char	*ptr4;
+	W_WORD stack[COL_MAX];
+	for(col=0;col<COL_MAX;col++){
+		stack[col]=W_E;
+	}
 	ptr=buff;
-	j=0;
 	if(strlen(buff)==0) return 0;
-	for(i=0;i<COM_LINE;){
+	for(col=0;col<COL_MAX;col++){
 		token=GetToken(word,100,&ptr);
-		if(i>=2 && token==T_COMMA){
+		if(token==T_COMMA){
 			if(comma==0){
 				comma++;
+				stack[col]=W_COMMA;
 			}else{
-				i++;
+				//double commas mean there is an omited parameter between them.
+				stack[col++]=W_OMIT;
+				stack[col]=W_COMMA;
 			}
 			continue;
 		}
 		if(token==T_WORD || token==T_EOF){
 			if(strlen(word)==0)
 				return 0;
-			code=check_researve(word);
-			if(code==W_E){//Incomplete word to be compensated
-				for(k=0;;k++,j++){
+			code=check_reserved(word);
+			if(code==W_E){//Not Matched, Incomplete word to be compensated
+				for(raw=0;;raw++){
 					//extract candidate word
-					wword=tree[j].word[i];
-					if(i==0){//top command
-						if(wword==W_E){
-							return 0;
-						}else if(wword==W_S){
-							continue;
-						}
-					}else if(k!=0 && tree[j].word[i-1]!=W_S){
-						//Change preceding command
-						return 0;
-					}else if(wword==W_S){
+					wword=tree[raw].word[col];
+					if(wword==W_B){
+						return 0;//No candidate
+					}
+					if(check_hist(stack,raw)==-1){
 						continue;
 					}
 					//conver to string
@@ -241,8 +224,9 @@ int WordCompensation(char *buff)
 					if(ptr2==NULL){
 						return 0;
 					}
-					//
+					//Compare sub string
 					if(strncmp(word,ptr2,strlen(word))==0){
+						//Candidate found
 						ptr3=strstr(buff,word);
 						if(ptr3==NULL){
 							return 0;
@@ -258,32 +242,14 @@ int WordCompensation(char *buff)
 						strcpy(ptr3,ptr2);
 						strcat(buff," ");
 						return 1;
+					}else{
+						//Unmatch
+						continue;
 					}
 				}
-			}
-			for(;;){
-				if(tree[j].word[i]==code){
-					break;
-				}
-				j++;
-				if(i==0){
-					if(tree[j].word[0]==W_E){
-						return 0;
-					}
-				}else{
-					if(tree[j].word[i-1]!=W_S){
-						return 0;
-					}
-				}
-			}
-			i++;
-			//Hit word;
-			if(token==T_EOF ){
-				return 0;
-			}
-			//T_WORD
-			if(tree[j].word[i]==W_E){
-				return 0;
+			}else{//Match reserved word
+				stack[col]=code;
+				continue;
 			}
 		}else{
 			return 0;
@@ -292,109 +258,68 @@ int WordCompensation(char *buff)
 	return 0;
 }
 
-int GetCmdID(char **buff,int *paran,int *mode,int *level)
+int AnalyzeCmdLine(char *buff,char params[COL_MAX][PARAM_LEN])
 {
-	int i,j;
-	int comma=0;
-	char	word[100];
+	int col,raw;
+	int cmd;
+	W_WORD stack[COL_MAX];
 	TOKEN	token;
-	W_WORD	code;
-	j=0;
-	for(i=0;i<COM_LINE;){
-		token=GetToken(word,100,buff);
-		if(i>=2 && token==T_COMMA){
-			if(comma==0){
-				comma++;
-			}else{
-				i++;
-			}
-			continue;
-		}
+	W_WORD code;
+	char	word[PARAM_LEN];
+	char *ptr;
+	int  depth;
+	int n;
+
+	for(col=0;col<COL_MAX;col++){
+		stack[col]=W_E;
+	}
+	ptr=buff;
+	//make stack 
+	for(col=0;col<COL_MAX;col++){
+		token=GetToken(word,100,&ptr);
 		if(token==T_WORD || token==T_EOF){
-			code=check_researve(word);
-			if(code==W_E){
-				return -11;
-			}
-			for(;;){
-				if(tree[j].word[i]==code){
+			if(strlen(word)!=0){
+				code=check_reserved(word);
+				if(code==W_E){//Not Matched, Incomplete word to be compensated
 					break;
 				}
-				j++;
-				if(i==0){
-					if(tree[j].word[0]==W_E){
-						return -12;
-					}
-				}else{
-					if(tree[j].word[i-1]!=W_S){
-						return -13;
-					}
-				}
-			}
-			i++;
-			//Hit word;
-			if(token==T_EOF ){
-				if(tree[j].word[i]!=W_E){
-					return -14;
-				}else{
-					if(paran) *paran=tree[j].params;
-					if(mode) *mode=tree[j].mode;
-					if(level) *level=i;
-					return tree[j].CMD_ID;
-				}
-			}
-			//T_WORD
-			if(tree[j].word[i]==W_E){
-				if(paran) *paran=tree[j].params;
-				if(mode) *mode=tree[j].mode;
-				if(level) *level=i;
-				return tree[j].CMD_ID;
-			}
-		}else{
-			printf("E:token:%d\n",token);
-			return -19;
-		}
-	}
-	return -20;
-}
-int GetParams(char **buff,int level,int para_num,size_t para_len,char **params)
-{
-	int		i;
-	char	word[128];
-	char	*p;
-	TOKEN	token;
-	size_t	len;
-	int		comma=0;
-	p=(char *)params;
-	if(level==1) comma=1;
-	for(i=0;;){
-		token=GetToken(word,100,buff);
-		if(token==T_COMMA){
-			if(comma==0){
-				comma=1;
-				continue;
+				stack[col]=code;
 			}else{
-				comma=1;
-			}
-		}else{
-			comma=0;
-		}
-		len=strlen(word);
-		if(token==T_EOF && len==0){
-			break;
-		}
-		if(len<para_len-1){
-			//printf("p=%X w=%s token=%d\n",p,word,token);
-			strncpy(p,word,para_len-1);
-			i++;
-			p+=para_len;
-			if((i>=para_num) || (token==T_EOF)){
 				break;
 			}
-		}else{
-			return -1;
 		}
 	}
-	return i;
-}
 
+	//Search Next Word
+	depth=0;
+	for(raw=0;tree[raw].word[0]!=W_B;raw++){
+		for(col=0;col<COL_MAX;col++){
+			if(stack[col]==W_E&&tree[raw].word[col]==W_E){
+				if(depth<col){
+					cmd=raw;
+					depth=col;
+				}else{
+					break;
+				}
+			}else if(stack[col]!=tree[raw].word[col]){
+				break;
+			}
+		}
+	}
+	if(depth==0){
+		return CMD_NOP;
+	}
+	for(n=0;*word;){
+		strcpy(params[n++],word);
+		if(n>=COL_MAX){
+			break;
+		}
+		token=GetToken(word,100,&ptr);
+		if(token==T_WORD || token==T_EOF){
+			continue;
+		}
+		break;
+	}
+	return tree[cmd].CMD_ID;
+}
 

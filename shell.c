@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <errno.h>
 #include <ctype.h>
+#include <signal.h>
 #include "rule.h"
 #include "shell.h"
 
@@ -22,7 +23,7 @@ static	char	prom[1024];
 static	char	hist[HIST_MAX][1024];
 static	int	tindex=-1;
 static	int	upper=0;
-
+static int e_flag;
 static struct termios termattr, save_termattr;
 static int ttysavefd = -1;
 static enum 
@@ -196,8 +197,10 @@ static void insertch(char ch,int shadow)
 	if(len>LEN_MAX){
 		return ;
 	}
-	for(i=len-1;pos<=i;i--){
-		buff[i+1]=buff[i];
+	if(len>0){
+		for(i=len-1;pos<=i;i--){
+			buff[i+1]=buff[i];
+		}
 	}
 	buff[pos]=ch;
 	len++;
@@ -282,6 +285,40 @@ static void update_hist(void)
 	}
 	memcpy(hist[0],buff,1024);
 }
+
+static void trunc1(char *buff)
+{
+	char *ptr;
+	for(ptr=buff+strlen(buff)-1;;ptr--){
+		if(*ptr==' '){
+			*ptr='\0';
+			continue;
+		}
+		if(buff>=ptr){
+			break;
+		}if(*ptr!=' '){
+			break;
+		}
+	}
+}
+void handler(int num)
+{
+	e_flag=0;
+}
+void SetCloseConsole(unsigned int sec)
+{
+	struct sigaction sa;
+	sa.sa_handler=handler;
+	sa.sa_flags=(int)SA_RESETHAND;
+	sigaddset(&sa.sa_mask,SIGALRM);
+	sigaction(SIGALRM,&sa,0);
+	set_tty_raw();	 /* set up character-at-a-time */
+	alarm(sec);
+	for(e_flag=1;e_flag;){
+		kb_getc();	
+	}
+	set_tty_cooked();/* restore mode */
+}
 	
 
 int GetString(char *ptr,size_t plen,char *prompt,int pshadow)
@@ -290,6 +327,7 @@ int GetString(char *ptr,size_t plen,char *prompt,int pshadow)
 	int	cmd;
 	int	ret;
 	int	c;
+	char cand[1024];
 
 	if(prompt==NULL||strlen(prompt)>1000){
 		strcpy(prom,PROM);
@@ -315,6 +353,7 @@ int GetString(char *ptr,size_t plen,char *prompt,int pshadow)
 #ifndef TEST 
 			case 0x09: /* TAB */
 				if(pshadow==0){
+					cand[0]=0;
 					if(WordCompensation(buff)==1){
 						clearline();
 						buff[LEN_MAX]='\0';
@@ -322,6 +361,9 @@ int GetString(char *ptr,size_t plen,char *prompt,int pshadow)
 						printf("%s%s",prom,buff);
 						pos=len;
 						set_pos();
+					}else if(WordsCandidate(buff,cand)==1){
+						printf("\n\r%s\n\r",cand);
+						printf("%s%s",prom,buff);
 					}
 				}
 				break;
@@ -330,6 +372,7 @@ int GetString(char *ptr,size_t plen,char *prompt,int pshadow)
 				set_tty_cooked();/*restore old mode */
 				printf("\n");
 				buff[len]='\0';
+				trunc1(buff);
 				strncpy(ptr,buff,plen-1);
 				if(pshadow==0){
 					update_hist();
@@ -383,8 +426,8 @@ int GetString(char *ptr,size_t plen,char *prompt,int pshadow)
 				if(len==0){
 					return -1;
 				}else{
+					trunc1(buff);
 					strncpy(ptr,buff,plen-1);
-					printf("%s\n",buff);
 					return 0;
 				}
 			}else{
@@ -392,14 +435,40 @@ int GetString(char *ptr,size_t plen,char *prompt,int pshadow)
 			}
 		}	
 	}		
+	return -1;
 }
 
 #ifdef MAIN
 int main(int argc, char * argv[])
 {
 	char	stbuff[1024];
-	for(;GetString(stbuff,1000,">",0)==0;){
-		printf("str=%s\n",stbuff);
+	int cmd;
+	char	params[COL_MAX][PARAM_LEN];
+
+	for(;;){
+		if(GetString(stbuff,1000,"login:",1)==1){
+			exit(1);
+		}
+		if(strcmp(stbuff,"admin")==0){
+			break;
+		}
+		SetCloseConsole(2);
+	}
+	for(;;){
+		if(GetString(stbuff,1000,"=>",0)==1){
+			printf("enter \"exit\" to quit\n");
+			continue;
+		}
+		printf("str=%s|\n",stbuff);
+		if(strcmp(stbuff,"exit")==0){
+			break;
+		}
+		for(int i=0;i<COL_MAX;i++) params[i][0]=0;
+		cmd=AnalyzeCmdLine(stbuff,params);	
+		printf("cmd=%d\r\n",cmd);
+		for(int i=0;i<COL_MAX && params[i][0];i++){
+			printf("P%d:%s|\n",i+1,params[i]);
+		}
 	}
 }
 #endif
