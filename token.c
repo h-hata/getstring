@@ -13,8 +13,7 @@ static char mygetchar(char **inp)
 	c=*p;
 	p++;
 	*inp=p;
-	if(c=='\0') return EOF;
-	else	return c;
+	return c;
 }
 	
 	
@@ -37,7 +36,7 @@ TOKEN GetToken(char *word,int len,char **inp)
 	char	*w;
 	int	l=0;
 	w=word;	
-	for(*w=0;EOF!=(c=mygetchar(inp));){
+	for(*w=0;'\0'!=(c=mygetchar(inp));){
 		switch(state){
 		case NEUTRAL:
 			switch(c){

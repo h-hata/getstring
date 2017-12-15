@@ -13,7 +13,6 @@ typedef enum{
 	W_AGENT,
 	W_TERM,
 	W_TRAF,
-	W_TC,
 	W_TS,
 	W_SS,
 	W_CONN,
@@ -25,6 +24,7 @@ typedef enum{
 	W_PASS,
 	W_UPDATE,
 	W_ROUTE,
+	W_LOG,
 	W_EXIT,
 	W_OMIT,
 	W_COMMA,
@@ -47,6 +47,7 @@ static WORD_LIST wlist[]={
 	{W_TRAF,"traf"},
 	{W_REG,"register"},
 	{W_PASS,"password"},
+	{W_LOG,"log"},
 	{W_UPDATE,"update"},
 	{W_ROUTE,"route"},
 	{W_EXIT,"exit"},
@@ -59,6 +60,7 @@ typedef struct {
 COMMAND_TREE	tree[]=
 {
 	{CMD_SHOW_STATUS,{W_SHOW,W_STATUS,W_E}},
+	{CMD_SHOW_AGENT ,{W_SHOW,W_AGENT,W_E}},
 	{CMD_SHOW_AGENT_TRAF ,{W_SHOW,W_AGENT,W_TRAF,W_E}},
 	{CMD_SHOW_AGENT_ROUTE,{W_SHOW,W_AGENT,W_ROUTE,W_E}},
 	{CMD_SHOW_TRAF,{W_SHOW,W_TRAF,W_E}},
@@ -71,6 +73,7 @@ COMMAND_TREE	tree[]=
 	{CMD_DEL_TERM,{W_DEL,W_TERM,W_E}},
 	{CMD_REG_PASS,{W_REG,W_PASS,W_E}},
 	{CMD_UPDATE,{W_UPDATE,W_E}},
+	{CMD_LOG,{W_LOG,W_E}},
 	{CMD_EXIT ,{W_EXIT}},
 	{CMD_NOP,{W_B,W_B,W_B,W_B,W_B}}
 };

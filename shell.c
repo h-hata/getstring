@@ -309,13 +309,13 @@ void SetCloseConsole(unsigned int sec)
 {
 	struct sigaction sa;
 	sa.sa_handler=handler;
-	sa.sa_flags=(int)SA_RESETHAND;
+	sa.sa_flags=(int)(SA_RESETHAND);
 	sigaddset(&sa.sa_mask,SIGALRM);
 	sigaction(SIGALRM,&sa,0);
 	set_tty_raw();	 /* set up character-at-a-time */
 	alarm(sec);
 	for(e_flag=1;e_flag;){
-		kb_getc();	
+		kb_getc();
 	}
 	set_tty_cooked();/* restore mode */
 }
@@ -339,7 +339,7 @@ int GetString(char *ptr,size_t plen,char *prompt,int pshadow)
 	pos=0;
 	tindex=-1;
 	ret=set_tty_raw();	 /* set up character-at-a-time */
-	printf("%s",prom);
+	printf("%s",prom);fflush(stdout);
 	if(ret!=-1){		
 		while (1){
 			//usleep(20000);		 /* 20 ms*/
@@ -460,15 +460,14 @@ int main(int argc, char * argv[])
 			continue;
 		}
 		printf("str=%s|\n",stbuff);
-		if(strcmp(stbuff,"exit")==0){
-			break;
-		}
 		for(int i=0;i<COL_MAX;i++) params[i][0]=0;
 		cmd=AnalyzeCmdLine(stbuff,params);	
 		printf("cmd=%d\r\n",cmd);
 		for(int i=0;i<COL_MAX && params[i][0];i++){
 			printf("P%d:%s|\n",i+1,params[i]);
 		}
+		if(cmd==CMD_EXIT)
+			break;
 	}
 }
 #endif
