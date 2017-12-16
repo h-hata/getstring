@@ -51,7 +51,7 @@ Enter *tab*  following 's' key on the prompt '=>' , and then the s is replaced w
 When you would like to enter 'delete terminal' command, you don't have to enter 14 letters.  Instead only four keys "d *tab* t *tab*" are enough.
 
 ### history
-After entering several command, you can call the command line you entered previously when pressing the up arrow key. The command line is editable and you can move the cursor by the right and left arrow keys. When you have to enter the same command repeatedly such like show status, this historical function is helpful.
+After entering several commands, you can call the command line you entered previously when pressing the up arrow key. The command line is editable and you can move the cursor by the right and left arrow keys. When you have to enter the same command repeatedly such like show status, this historical function is helpful.
 
 ## Arrangement
 ### key words
