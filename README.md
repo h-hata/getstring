@@ -1,6 +1,6 @@
 # getstring
 ## Description
-This a front end library for an application having CLI (Command Line Interface) on POSIX OS like Linux or MacOSX. You can replace the gets() or scanf() functions of the C standard library with the GetString() function of this library when you want to get a command line string from user CLI.  
+This a front end library for an application having CLI (Command Line Interface) on POSIX OS like Linux or MacOSX. You can replace the fgets(stdin,) or fscanf(stdin,) functions of the C standard library with the GetString() function of this library when you want to get a command line string from user CLI.  
 This library also provides you with **history**, **completion** and **candidate** functions. In addition to, the "login:" prompting is available. In the login prompt mode, the letters user input are masked with asterisks.
 
 ## Example Build
@@ -65,7 +65,7 @@ Finally, you must declare each command line in the tree of COMMAND_TREE structur
 ***proto typing***   
 `int GetString(char *ptr,size_t plen,char *prompt,int pshadow);`
 ***description***  
-Get one string from user. it returns when user presses the enter key. This means completion, comlete and history functions are supported in this API.
+Get one string from user. it returns when user presses the enter key. This means completion, completion and history functions are supported and capsulated inside this API.
 ***parameters***  
 ptr: the buffer address in which the string is stored.  
 plen: the size of the buffer. It is recommended more than 1KB.
