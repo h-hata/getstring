@@ -15,7 +15,7 @@ Then login prompt is displayed.
 `=>`  
 The password is 'admin'. The characters you entered are masked with asterisks. If you are prompted with '=>',  the authentication was successful. When the wrong password is given, the console blocks you for 2 seconds. If you push any key on your keyboard, no character is echo backed including 'ctl-C' during blocking.  
 ### command grammar
-At first, you has to define the command grammar of your system. In this example, it is defined as the following table. You may write down your own grammar in the rule.c and rule.h.
+At first, you has to define the command grammar of your system. In this example, it is defined as the following table. You may write down your own grammar in the rule.c and rule.h.　　
 
 |cmd#| col1 | col2 |  col3| col4 |
 |:-------|------:|:--------:|:--------:|
@@ -132,3 +132,7 @@ for(;;){
 ## Remarks
 - All strings are output to the standard output int this library. If you would like remote access to your application through network, there are major two ways to modified this library. One is to implement this library on the client side application. Another is on server side.
 In the first one, this library can be used as it is. On the other hand, the modification of this library becomes more complex because the standard out put is no longer used.
+- I recommend this library on the main thread on your application rather than child thread.
+
+## License
+MIT
