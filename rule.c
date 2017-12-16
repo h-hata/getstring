@@ -74,7 +74,7 @@ COMMAND_TREE	tree[]=
 	{CMD_REG_PASS,{W_REG,W_PASS,W_E}},
 	{CMD_UPDATE,{W_UPDATE,W_E}},
 	{CMD_LOG,{W_LOG,W_E}},
-	{CMD_EXIT ,{W_EXIT}},
+	{CMD_EXIT ,{W_EXIT,W_E}},
 	{CMD_NOP,{W_B,W_B,W_B,W_B,W_B}}
 };
 
