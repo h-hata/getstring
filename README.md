@@ -1,7 +1,7 @@
 # getstring
 ## Description
 This a front end library for an application having CLI (Command Line Interface) on POSIX OS like Linux or MacOSX. You can replace the gets() or scanf() functions of the C standard library with the GetString() function of this library when you want to get a command line string from user CLI.  
-This library also provides you with **history**, **completion** and **candidate** functions. In addition to, the "login:" prompting is available. In the login prompt mode,
+This library also provides you with **history**, **completion** and **candidate** functions. In addition to, the "login:" prompting is available. In the login prompt mode, the letters user input are masked with asterisks.
 
 ## Example Build
 This libray consists of three source files of C language. The shell.c has an example main function and it is compiled only if you give -DMAIN option to gcc. Just enter make command without option to build example application shell.  
