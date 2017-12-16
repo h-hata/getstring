@@ -17,22 +17,22 @@ The password is 'admin'. The characters you entered are masked with asterisks. I
 ### command grammar
 At first, you has to define the command grammar of your system. In this example, it is defined as the following table. You may write down your own grammar in the rule.c and rule.h.　　
 
-|cmd#| col1 | col2 |  col3| col4 |
-|:-------|------:|:--------:|:--------:|
-|1001|show   |status |
-|1002|show   |agent |   < id >    |
+|cmd# | col1 |  col2    | col3| col4 |
+|:---:|:----:|:------:|:------:|:----:|
+|1001|show   |status |||
+|1002|show   |agent |   < id >    ||
 |1003 |show   |agent |traf| < id > |
 |1004|show   |agent |route| < id >|
-|1005 |show   |terminal |  < id >|
-|1005 |show   |traf |
-|2001 |connect|open | < id > |
-|2002 |connect|open | < id > |
-|3001|add|agent| < id > |
-|3002|add|terminal| < id > |
-|4001|delete|agent| < id > |
-|4002|delete|terminal| < id > |
-|8000|log|
-|9000|exit|
+|1005 |show   |terminal |  < id >||
+|1005 |show   |traf |||
+|2001 |connect|open | < id > ||
+|2002 |connect|open | < id > ||
+|3001|add|agent| < id > ||
+|3002|add|terminal| < id >| |
+|4001|delete|agent| < id > ||
+|4002|delete|terminal| < id > ||
+|8000|log||||
+|9000|exit|||||
 
 ## Functions
 ### candidate
